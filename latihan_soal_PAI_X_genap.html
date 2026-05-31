@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Soal PAI Kelas X — Semester Genap</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b3c;
+    --gold: #c8922a;
+    --cream: #fdf8ee;
+    --dark: #1a1a2e;
+    --text: #2d2d2d;
+    --border: #e2d6b8;
+    --soft: #f5efe0;
+    --answered: #e8f5ee;
+    --answered-border: #1a6b3c;
+    --correct: #e8f5ee;
+    --correct-border: #1a6b3c;
+    --wrong: #fdecea;
+    --wrong-border: #d93025;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--green) 0%, #0f4a2a 100%);
+    color: white;
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .header-ornament {
+    font-family: 'Amiri', serif;
+    font-size: 22px;
+    color: #f0d080;
+    margin-bottom: 8px;
+    letter-spacing: 4px;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .header-sub {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-bottom: 16px;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-label { font-size: 12px; color: #666; white-space: nowrap; }
+  .progress-bar-outer {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), #2d9e5f);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-count { font-size: 12px; font-weight: 600; color: var(--green); white-space: nowrap; }
+
+  /* Section divider */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 20px 8px;
+  }
+  .section-badge {
+    background: var(--gold);
+    color: white;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green);
+    flex: 1;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Question card */
+  .question-card {
+    margin: 8px 16px;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .question-card.answered {
+    border-color: var(--answered-border);
+    background: var(--answered);
+  }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .question-card.answered .q-num {
+    background: #2d9e5f;
+  }
+  .q-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+    padding-top: 4px;
+  }
+  .q-text .arabic {
+    font-family: 'Amiri', serif;
+    font-size: 18px;
+    direction: rtl;
+    display: block;
+    text-align: right;
+    margin: 6px 0;
+    color: var(--dark);
+  }
+
+  /* Options */
+  .options {
+    padding: 8px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #e8e0cc;
+    background: var(--cream);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .option:hover { border-color: var(--gold); background: #fffbf0; }
+  .option.selected {
+    border-color: var(--green);
+    background: #e8f5ee;
+    font-weight: 500;
+  }
+  .option-letter {
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #bbb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #777;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option.selected .option-letter {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .option.correct {
+    border-color: #1a6b3c !important;
+    background: #e8f5ee !important;
+    font-weight: 600;
+  }
+  .option.correct .option-letter {
+    background: #1a6b3c !important;
+    border-color: #1a6b3c !important;
+    color: white !important;
+  }
+  .option.wrong {
+    border-color: #d93025 !important;
+    background: #fdecea !important;
+  }
+  .option.wrong .option-letter {
+    background: #d93025 !important;
+    border-color: #d93025 !important;
+    color: white !important;
+  }
+  .option.show-correct {
+    border-color: #1a6b3c !important;
+    background: #e8f5ee !important;
+    opacity: 0.7;
+  }
+  .option.show-correct .option-letter {
+    background: #1a6b3c !important;
+    border-color: #1a6b3c !important;
+    color: white !important;
+  }
+  .option.disabled { pointer-events: none; opacity: 0.6; }
+  .option.correct, .option.wrong, .option.show-correct { pointer-events: none; }
+  .indicator {
+    font-size: 16px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .question-card.correct-card { border-color: #1a6b3c; }
+  .question-card.wrong-card { border-color: #d93025; }
+  .q-num.correct-num { background: #1a6b3c; }
+  .q-num.wrong-num { background: #d93025; }
+
+  /* Footer */
+  .footer-bar {
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 16px 20px;
+    text-align: center;
+    margin-top: 12px;
+  }
+  .score-btn {
+    background: linear-gradient(135deg, var(--green), #0f4a2a);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    letter-spacing: 0.3px;
+  }
+  .score-btn:active { transform: scale(0.97); }
+  .score-btn:hover { opacity: 0.9; }
+
+  /* Result modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+  .modal-icon { font-size: 48px; margin-bottom: 12px; }
+  .modal h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
+  .modal-score { font-size: 48px; font-weight: 700; color: var(--green); margin: 10px 0 4px; }
+  .modal-sub { color: #666; font-size: 14px; margin-bottom: 20px; }
+  .modal-breakdown {
+    display: flex; gap: 12px; justify-content: center; margin-bottom: 20px;
+  }
+  .modal-stat {
+    flex: 1; padding: 10px 8px; border-radius: 8px; font-size: 13px;
+  }
+  .modal-stat.benar { background: #e8f5ee; color: #1a6b3c; font-weight: 600; }
+  .modal-stat.salah { background: #fdecea; color: #d93025; font-weight: 600; }
+  .modal-stat .stat-num { font-size: 24px; font-weight: 700; display: block; }
+  .modal-close {
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  @media (min-width: 600px) {
+    .question-card { margin: 8px auto; max-width: 680px; }
+    .section-header { max-width: 712px; margin: 0 auto; }
+    .progress-wrap { max-width: 100%; }
+    .footer-bar { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-ornament">✦ ✦ ✦</div>
+  <h1>Latihan Soal PAI & Budi Pekerti</h1>
+  <div class="header-sub">Kelas X / Fase E — Semester Genap 2025/2026</div>
+  <div class="header-meta">
+    <span class="meta-pill">50 Soal Pilihan Ganda</span>
+    <span class="meta-pill">Tanpa Kunci Jawaban</span>
+    <span class="meta-pill">ASAT</span>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <span class="progress-label">Progress</span>
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progressBar"></div>
+  </div>
+  <span class="progress-count" id="progressCount">0 / 50</span>
+</div>
+
+<div id="quizContainer"></div>
+
+<div class="footer-bar">
+  <button class="score-btn" onclick="showScore()">Lihat Hasil Jawaban Saya</button>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon">📋</div>
+    <h2>Hasil Latihan</h2>
+    <div class="modal-score" id="modalScore">-</div>
+    <div class="modal-sub" id="modalSub">soal telah dijawab</div>
+    <div class="modal-breakdown">
+      <div class="modal-stat benar"><span class="stat-num" id="statBenar">0</span>✅ Benar</div>
+      <div class="modal-stat salah"><span class="stat-num" id="statSalah">0</span>❌ Salah</div>
+    </div>
+    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('show')">Tutup</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // === PERILAKU TERCELA ===
+  {
+    section: "Perilaku Tercela (Akhlak Mażmūmah)",
+    no: 1,
+    text: "Akhlak mażmūmah adalah perilaku yang dilarang dalam Islam karena dapat merusak diri sendiri dan orang lain. Contoh berikut yang termasuk akhlak mażmūmah adalah…",
+    options: ["Bersyukur atas nikmat Allah", "Sombong dan meremehkan orang lain", "Rajin bersedekah kepada fakir miskin", "Gemar membaca Al-Qur'an setiap hari"]
+  },
+  // === SYU'ABUL IMAN ===
+  {
+    section: "Syu'abul Iman (Cabang-Cabang Iman)",
+    no: 2,
+    text: "Syu'abul Iman secara bahasa berarti cabang-cabang keimanan. Berdasarkan hadis Nabi SAW, jumlah cabang iman adalah…",
+    options: ["Lebih dari 60 cabang", "Tepat 50 cabang", "Kurang dari 30 cabang", "Hanya 6 cabang saja"]
+  },
+  {
+    section: "Syu'abul Iman (Cabang-Cabang Iman)",
+    no: 3,
+    text: "Hadis tentang Syu'abul Iman menyebutkan bahwa cabang iman yang paling tinggi adalah…",
+    options: ["Menyingkirkan duri dari jalan", "Membaca Al-Qur'an setiap malam", "Mengucapkan lā ilāha illallāh", "Menunaikan zakat mal"]
+  },
+  // === PERILAKU TERCELA lanjutan ===
+  {
+    section: "Perilaku Tercela (Akhlak Mażmūmah)",
+    no: 4,
+    text: "Dalil Al-Qur'an yang melarang perbuatan tercela seperti gibah (gunjing) terdapat dalam surah…",
+    options: ["Al-Hujurat: 12", "Al-Baqarah: 185", "An-Nisa: 36", "Ali Imran: 110"]
+  },
+  {
+    section: "Perilaku Tercela (Akhlak Mażmūmah)",
+    no: 5,
+    text: "Hasad (iri dengki) termasuk akhlak mażmūmah karena…",
+    options: ["Membuat seseorang rajin beribadah", "Dapat membakar pahala kebaikan seperti api membakar kayu", "Mempercepat datangnya rezeki", "Membuat orang menjadi lebih produktif"]
+  },
+  {
+    section: "Perilaku Tercela (Akhlak Mażmūmah)",
+    no: 6,
+    text: "Sikap takabur (sombong) dilarang dalam Islam karena termasuk sifat yang paling dibenci Allah. Pernyataan berikut yang paling tepat mengenai takabur adalah…",
+    options: ["Takabur dibolehkan jika seseorang memang berilmu tinggi", "Takabur adalah menolak kebenaran dan meremehkan orang lain", "Takabur sama dengan percaya diri yang tinggi", "Takabur hanya terjadi pada orang kaya saja"]
+  },
+  // === FASTABIKUL KHOIRAT ===
+  {
+    section: "Fastabikul Khoirāt (Berlomba dalam Kebaikan)",
+    no: 7,
+    text: "Fastabikul Khoirāt artinya berlomba-lomba dalam kebaikan. Perintah ini terdapat dalam Al-Qur'an surah…",
+    options: ["Al-Baqarah: 148", "Al-Kahf: 110", "Az-Zumar: 53", "Al-Mulk: 2"]
+  },
+  // === ETOS KERJA ===
+  {
+    section: "Etos Kerja",
+    no: 8,
+    text: "Etos kerja dalam Islam berlandaskan keyakinan bahwa bekerja adalah bentuk ibadah kepada Allah. Hadis yang mendukung hal ini adalah…",
+    options: ["'Tangan di atas lebih baik dari tangan di bawah'", "Sebaik-baik manusia adalah yang paling bermanfaat bagi orang lain", "Sesungguhnya Allah mewajibkan ihsan (profesionalisme) dalam segala hal", "Sholat adalah tiang agama"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 9,
+    text: "Seorang muslim yang memiliki etos kerja tinggi ditunjukkan oleh sikap berikut, kecuali…",
+    options: ["Bekerja dengan sungguh-sungguh dan penuh tanggung jawab", "Selalu menunda pekerjaan yang bisa dilakukan hari ini", "Tidak mudah putus asa ketika menghadapi kegagalan", "Berusaha meningkatkan kualitas diri secara terus-menerus"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 10,
+    text: "Dalam Islam, bekerja keras untuk menafkahi keluarga dinilai sebagai…",
+    options: ["Hal biasa yang tidak bernilai ibadah", "Kewajiban yang bernilai pahala besar di sisi Allah", "Sesuatu yang hanya dilakukan jika terpaksa", "Perbuatan yang dibolehkan tanpa aturan"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 11,
+    text: "Ayat Al-Qur'an yang memerintahkan manusia untuk menyebarkan diri di muka bumi dan mencari karunia Allah setelah selesai shalat terdapat dalam surah…",
+    options: ["Al-Jumu'ah: 10", "Al-Muzzammil: 20", "Al-Isra': 12", "Al-Qasas: 77"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 12,
+    text: "Prinsip 'itqan' dalam etos kerja Islam berarti…",
+    options: ["Bekerja secara asal-asalan", "Melakukan pekerjaan dengan sungguh-sungguh dan sempurna", "Hanya mengandalkan doa tanpa usaha", "Bekerja keras tanpa memperhatikan halal-haram"]
+  },
+  // === LARANGAN PERGAULAN BEBAS ===
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 13,
+    text: "Allah SWT melarang mendekati perbuatan zina karena zina adalah perbuatan yang sangat keji. Larangan tersebut terdapat dalam surah…",
+    options: ["Al-Isra': 32", "Al-Baqarah: 286", "An-Nur: 2", "Al-Furqan: 68"]
+  },
+  // === FASTABIKUL KHOIRAT lanjutan ===
+  {
+    section: "Fastabikul Khoirāt (Berlomba dalam Kebaikan)",
+    no: 14,
+    text: "Berikut ini yang merupakan contoh penerapan fastabikul khoirāt dalam kehidupan sehari-hari adalah…",
+    options: ["Bersaing meraih nilai tertinggi dengan cara menyontek", "Berlomba-lomba membantu orang yang membutuhkan", "Menunggu orang lain berbuat baik lebih dahulu", "Melakukan kebaikan hanya jika dilihat orang"]
+  },
+  // === LARANGAN PERGAULAN BEBAS lanjutan ===
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 15,
+    text: "Salah satu dampak negatif pergaulan bebas yang bertentangan dengan nilai Islam adalah…",
+    options: ["Meningkatkan rasa persaudaraan antar sesama", "Menimbulkan kerusakan moral dan sosial dalam masyarakat", "Mendorong kreativitas kaum muda", "Memperluas wawasan pergaulan remaja"]
+  },
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 16,
+    text: "Cara efektif yang diajarkan Islam untuk menghindari pergaulan bebas adalah…",
+    options: ["Bergaul tanpa batas dengan lawan jenis", "Menutup diri dari semua pergaulan", "Menjaga pandangan, menutup aurat, dan memperbanyak ibadah", "Mengikuti tren pergaulan modern tanpa filter"]
+  },
+  // === ETOS KERJA & PERILAKU BAIK ===
+  {
+    section: "Etos Kerja",
+    no: 17,
+    text: "Tokoh teladan dalam etos kerja yang diceritakan dalam Al-Qur'an sebagai sosok yang kuat dan dapat dipercaya adalah…",
+    options: ["Nabi Musa AS", "Nabi Ibrahim AS", "Nabi Yusuf AS", "Nabi Sulaiman AS"]
+  },
+  {
+    section: "Perilaku Baik (Akhlak Maḥmūdah)",
+    no: 18,
+    text: "Akhlak maḥmūdah adalah akhlak terpuji yang wajib dimiliki setiap muslim. Berikut yang termasuk akhlak maḥmūdah adalah…",
+    options: ["Riya' dan sum'ah", "Jujur, amanah, dan tawadu'", "Takabur dan 'ujub", "Bakhil dan tamak"]
+  },
+  {
+    section: "Perilaku Baik (Akhlak Maḥmūdah)",
+    no: 19,
+    text: "Sifat tawadu' berarti rendah hati. Orang yang memiliki sifat tawadu' akan menunjukkan perilaku…",
+    options: ["Selalu ingin dipuji orang lain", "Tidak mau mendengarkan pendapat orang lain", "Menghargai semua orang tanpa memandang status sosial", "Merasa dirinya paling benar dalam segala hal"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 20,
+    text: "Dalam surah At-Taubah ayat 105, Allah memerintahkan manusia untuk beramal, kemudian amal tersebut akan dilihat oleh Allah, Rasul-Nya, dan orang-orang mukmin. Ayat ini mengandung pesan tentang…",
+    options: ["Cukup beramal tanpa perlu konsistensi", "Pentingnya transparansi dan akuntabilitas dalam bekerja", "Bekerja hanya untuk mendapat pujian", "Menghindari pekerjaan yang berat"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 21,
+    text: "Sifat amanah dalam dunia kerja berarti…",
+    options: ["Melaksanakan tugas sebaik-baiknya sesuai kepercayaan yang diberikan", "Menyelesaikan pekerjaan semampunya tanpa standar", "Bekerja hanya jika diberi imbalan yang besar", "Mengutamakan kepentingan pribadi di atas kepentingan bersama"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 22,
+    text: "Rasulullah SAW bersabda bahwa tidak ada makanan yang lebih baik daripada hasil jerih payah tangan sendiri. Hadis ini mengajarkan pentingnya…",
+    options: ["Ketergantungan kepada orang lain", "Kemandirian dan etos kerja yang tinggi", "Menghindari pekerjaan fisik", "Hanya mengandalkan warisan orang tua"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 23,
+    text: "Islam mengajarkan konsep tawakkal yang benar dalam bekerja, yaitu…",
+    options: ["Pasrah tanpa berusaha sama sekali", "Berusaha maksimal kemudian menyerahkan hasilnya kepada Allah", "Bekerja keras tanpa berdoa kepada Allah", "Hanya berdoa tanpa melakukan usaha nyata"]
+  },
+  {
+    section: "Etos Kerja",
+    no: 24,
+    text: "Berikut ayat yang menjelaskan bahwa Allah tidak akan mengubah nasib suatu kaum kecuali mereka mengubah nasibnya sendiri terdapat dalam surah…",
+    options: ["Ar-Ra'd: 11", "Al-Baqarah: 45", "Ali Imran: 200", "An-Nahl: 97"]
+  },
+  // === FASTABIKUL KHOIRAT ===
+  {
+    section: "Fastabikul Khoirāt (Berlomba dalam Kebaikan)",
+    no: 25,
+    text: "Ayat Al-Qur'an yang berbunyi 'Maka berlomba-lombalah kamu dalam kebaikan' turun berkaitan dengan…",
+    options: ["Perintah bersedekah di bulan Ramadan", "Perbedaan kiblat antara kaum muslimin dan ahli kitab", "Larangan mendekati zina", "Kewajiban menunaikan haji"]
+  },
+  // === PERILAKU TERCELA ===
+  {
+    section: "Perilaku Tercela (Akhlak Mażmūmah)",
+    no: 26,
+    text: "Gibah (gunjing) dilarang dalam Islam dan diumpamakan seperti…",
+    options: ["Memakan bangkai saudara sendiri", "Minum racun yang mematikan", "Menusuk dengan pedang", "Membakar rumah orang lain"]
+  },
+  // === AKHLAK MAḤMŪDAH ===
+  {
+    section: "Akhlak Maḥmūdah",
+    no: 27,
+    text: "Sifat husnuzan (berprasangka baik) adalah lawan dari suuzan (berprasangka buruk). Manfaat memiliki sifat husnuzan adalah…",
+    options: ["Membuat kita mudah ditipu orang lain", "Menciptakan keharmonisan dalam hubungan sosial", "Menjadikan kita tidak waspada terhadap ancaman", "Membuat kita tidak kritis dalam berpikir"]
+  },
+  // === AKHLAK MAŻMŪMAH ===
+  {
+    section: "Akhlak Mażmūmah",
+    no: 28,
+    text: "Riya' adalah perbuatan beramal dengan tujuan mendapat pujian manusia, bukan karena Allah. Perbuatan ini termasuk…",
+    options: ["Syirik kecil yang wajib dihindari", "Ibadah yang sangat dianjurkan", "Perbuatan makruh yang dibolehkan", "Perbuatan mubah dalam kondisi tertentu"]
+  },
+  // === AKHLAK MAḤMŪDAH ===
+  {
+    section: "Akhlak Maḥmūdah",
+    no: 29,
+    text: "Berikut ini yang merupakan ciri-ciri orang yang memiliki akhlak maḥmūdah dalam pergaulan sehari-hari adalah…",
+    options: ["Sering menyakiti perasaan orang lain", "Menolong sesama tanpa mengharapkan imbalan", "Hanya bergaul dengan orang yang sederajat", "Menolak bergaul dengan orang yang berbeda pendapat"]
+  },
+  // === ETOS KERJA ===
+  {
+    section: "Etos Kerja",
+    no: 30,
+    text: "Dalam Islam, seseorang yang bekerja untuk menghidupi keluarganya dinilai sebagai…",
+    options: ["Perbuatan duniawi yang tidak bernilai ibadah", "Jihad di jalan Allah", "Sekadar kewajiban sosial", "Perbuatan yang boleh ditinggalkan jika sudah kaya"]
+  },
+  // === BERKOMPETISI DALAM KEBAIKAN ===
+  {
+    section: "Berkompetisi dalam Kebaikan",
+    no: 31,
+    text: "Berlomba dalam kebaikan menurut Islam harus dilandasi dengan niat yang benar, yaitu…",
+    options: ["Ingin dilihat dan dipuji banyak orang", "Semata-mata karena Allah SWT (ikhlas)", "Agar mendapat hadiah dari masyarakat", "Untuk mengalahkan orang lain"]
+  },
+  {
+    section: "Berkompetisi dalam Kebaikan",
+    no: 32,
+    text: "Contoh nyata berkompetisi dalam kebaikan di lingkungan sekolah adalah…",
+    options: ["Bersaing mendapat nilai tertinggi dengan berbuat curang", "Berlomba menjadi yang paling rajin shalat berjamaah dan belajar", "Berusaha menjadi yang paling populer di kelas", "Bersaing dalam penampilan dan gaya berpakaian"]
+  },
+  // === ETOS KERJA ===
+  {
+    section: "Etos Kerja",
+    no: 33,
+    text: "Nabi Muhammad SAW bersabda: 'Bekerjalah untuk duniamu seolah-olah kamu akan hidup selamanya, dan beramalah untuk akhiratmu seolah-olah kamu akan mati besok.' Makna hadis ini adalah…",
+    options: ["Mengabaikan kehidupan akhirat demi dunia", "Menyeimbangkan usaha dunia dan persiapan akhirat", "Hanya fokus pada amalan akhirat saja", "Bekerja tanpa memperhatikan nilai-nilai agama"]
+  },
+  // === FASTABIKUL KHOIRAT ===
+  {
+    section: "Fastabikul Khoirāt (Berlomba dalam Kebaikan)",
+    no: 34,
+    text: "Seorang siswa selalu berlomba menjadi yang pertama hadir di masjid untuk shalat berjamaah. Perilaku ini mencerminkan…",
+    options: ["Riya' dan ingin dipuji guru", "Semangat fastabikul khoirāt yang tulus", "Perilaku yang berlebihan", "Ketidakpedulian terhadap kegiatan lain"]
+  },
+  // === LARANGAN PERGAULAN BEBAS ===
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 35,
+    text: "Hukuman bagi pelaku zina yang sudah menikah (muhsan) menurut hukum Islam adalah…",
+    options: ["Denda sejumlah uang", "Dicambuk 100 kali", "Dirajam hingga meninggal", "Dipenjara seumur hidup"]
+  },
+  // === FASTABIKUL KHOIRAT ===
+  {
+    section: "Fastabikul Khoirāt (Berlomba dalam Kebaikan)",
+    no: 36,
+    text: "Berikut yang bukan termasuk bentuk fastabikul khoirāt adalah…",
+    options: ["Berlomba menjadi hafidz Al-Qur'an", "Bersaing dalam bersedekah untuk kepentingan umat", "Berlomba memperoleh kekayaan dengan cara tidak halal", "Berkompetisi menjadi yang paling rajin belajar"]
+  },
+  // === PERILAKU BAIK ===
+  {
+    section: "Perilaku Baik (Akhlak Maḥmūdah)",
+    no: 37,
+    text: "Seseorang yang memiliki sifat sabar menghadapi cobaan menunjukkan akhlak maḥmūdah. Balasan bagi orang yang sabar menurut Al-Qur'an adalah…",
+    options: ["Tidak akan mendapat cobaan lagi", "Allah bersama orang-orang yang sabar", "Selalu mendapat kemudahan dalam hidup", "Diberi umur yang panjang"]
+  },
+  // === BERKOMPETISI DALAM KEBAIKAN ===
+  {
+    section: "Berkompetisi dalam Kebaikan",
+    no: 38,
+    text: "Etos kerja yang tinggi dan semangat berkompetisi dalam kebaikan memiliki kesamaan prinsip, yaitu…",
+    options: ["Mengutamakan kepentingan individu di atas segalanya", "Dilandasi dengan niat ibadah dan mengharapkan ridha Allah", "Dilakukan hanya untuk mendapat pengakuan sosial", "Berfokus pada hasil tanpa memperhatikan proses"]
+  },
+  {
+    section: "Berkompetisi dalam Kebaikan",
+    no: 39,
+    text: "Perilaku yang mencerminkan semangat berkompetisi dalam kebaikan sesuai tuntunan Al-Qur'an adalah…",
+    options: ["Merasa puas dengan pencapaian yang ada dan tidak berkembang", "Terus meningkatkan kualitas ibadah dan akhlak setiap harinya", "Beramal hanya ketika ada yang mengawasi", "Membandingkan kebaikan diri dengan orang lain untuk merasa unggul"]
+  },
+  // === LARANGAN PERGAULAN BEBAS ===
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 40,
+    text: "Islam mengajarkan konsep 'menjaga kehormatan diri' (hifdzun nasl) sebagai bagian dari Maqāshid Syarī'ah. Hal ini bertujuan untuk…",
+    options: ["Membatasi pergaulan sosial secara total", "Menjaga keturunan dan kehormatan manusia dari kerusakan", "Melarang pernikahan di usia muda", "Memperketat aturan berpakaian saja"]
+  },
+  // === AKHLAK MAŻMŪMAH ===
+  {
+    section: "Akhlak Mażmūmah",
+    no: 41,
+    text: "Sikap namimah (mengadu domba) termasuk akhlak mażmūmah yang sangat berbahaya karena…",
+    options: ["Hanya merugikan diri sendiri", "Dapat merusak hubungan persaudaraan dan menimbulkan permusuhan", "Hanya sekadar berbagi informasi", "Tidak berdampak pada hubungan sosial masyarakat"]
+  },
+  // === LARANGAN PERGAULAN BEBAS ===
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 42,
+    text: "Langkah awal yang paling efektif untuk menghindari zina menurut hadis Nabi SAW adalah…",
+    options: ["Menghindari tempat-tempat ibadah", "Menjaga pandangan mata dari hal-hal yang diharamkan", "Menikah di usia semuda mungkin", "Tidak bergaul dengan siapa pun"]
+  },
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 43,
+    text: "Perbuatan yang termasuk dalam 'mendekati zina' (muqaddimah zina) yang wajib dihindari adalah…",
+    options: ["Belajar bersama secara terbuka di perpustakaan", "Berduaan (khalwat) dengan lawan jenis yang bukan mahram", "Menghadiri pengajian bersama remaja lain", "Bekerja sama dalam kegiatan sosial kemasyarakatan"]
+  },
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 44,
+    text: "Salah satu hikmah diharamkannya zina adalah untuk melindungi…",
+    options: ["Harta benda manusia (hifdzul maal)", "Nasab/keturunan yang jelas dan sah (hifdzun nasl)", "Akal pikiran manusia (hifdzul 'aql)", "Kebebasan beragama (hifdzud diin)"]
+  },
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 45,
+    text: "Di era digital, bentuk pergaulan bebas yang wajib dihindari remaja muslim meliputi…",
+    options: ["Menggunakan media sosial untuk dakwah", "Mengakses konten pornografi dan melakukan chat tidak bermoral", "Bertukar informasi ilmu pengetahuan secara online", "Bergabung dengan komunitas belajar daring"]
+  },
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 46,
+    text: "Pernyataan yang paling tepat tentang hukum pergaulan bebas dalam Islam adalah…",
+    options: ["Dibolehkan jika dilakukan atas dasar suka sama suka", "Dibolehkan jika tidak ada niat jahat", "Diharamkan karena dapat menjerumuskan pada zina", "Dimakruhkan jika dilakukan orang dewasa"]
+  },
+  // === ETOS KERJA ===
+  {
+    section: "Etos Kerja",
+    no: 47,
+    text: "Pernyataan yang paling mencerminkan etos kerja Islami adalah…",
+    options: ["Bekerja hanya jika mendapat upah yang tinggi", "Bekerja keras, jujur, profesional, dan ikhlas karena Allah", "Bekerja asal-asalan asalkan selesai tepat waktu", "Bekerja keras tanpa perlu peduli halal-haramnya"]
+  },
+  // === PERILAKU TERCELA ===
+  {
+    section: "Perilaku Tercela (Akhlak Mażmūmah)",
+    no: 48,
+    text: "Berikut ini yang merupakan akibat buruk dari memiliki sifat bakhil (pelit) adalah…",
+    options: ["Hartanya akan terus bertambah", "Dijauhi masyarakat dan hartanya tidak berkah", "Dihormati oleh orang-orang sekitarnya", "Mendapat pujian dari Allah dan Rasul-Nya"]
+  },
+  // === LARANGAN PERGAULAN BEBAS ===
+  {
+    section: "Larangan Pergaulan Bebas dan Zina",
+    no: 49,
+    text: "Islam menganjurkan pernikahan sebagai solusi halal bagi yang mampu agar terhindar dari perbuatan zina. Pesan ini terdapat dalam hadis yang berbunyi…",
+    options: ["'Barang siapa yang mampu menikah, maka hendaklah ia menikah'", "'Sesungguhnya amal itu tergantung niatnya'", "'Tuntutlah ilmu sampai ke negeri Cina'", "'Kebersihan adalah sebagian dari iman'"]
+  },
+  // === AKHLAK MAŻMŪMAH ===
+  {
+    section: "Akhlak Mażmūmah",
+    no: 50,
+    text: "Pernyataan yang paling tepat menggambarkan perbedaan antara akhlak mażmūmah dan akhlak maḥmūdah adalah…",
+    options: ["Akhlak mażmūmah dianjurkan dalam kondisi tertentu, akhlak maḥmūdah tidak wajib", "Akhlak mażmūmah dilarang karena merugikan diri dan orang lain, akhlak maḥmūdah diperintahkan karena membawa kebaikan", "Keduanya sama-sama dilarang dalam Islam", "Akhlak maḥmūdah hanya berlaku bagi orang alim saja"]
+  }
+];
+
+const letters = ['A','B','C','D'];
+const answered = {};
+let revealed = false;
+
+// Kunci jawaban: index 0=A, 1=B, 2=C, 3=D
+// Berdasarkan materi PAI yang benar
+const answerKey = {
+  1: 1,  // B - Sombong dan meremehkan orang lain
+  2: 0,  // A - Lebih dari 60 cabang
+  3: 2,  // C - Mengucapkan lā ilāha illallāh
+  4: 0,  // A - Al-Hujurat: 12
+  5: 1,  // B - membakar pahala seperti api membakar kayu
+  6: 1,  // B - menolak kebenaran dan meremehkan orang lain
+  7: 0,  // A - Al-Baqarah: 148
+  8: 2,  // C - Allah mewajibkan ihsan dalam segala hal
+  9: 1,  // B - Selalu menunda pekerjaan (kecuali)
+  10: 1, // B - Kewajiban yang bernilai pahala
+  11: 0, // A - Al-Jumu'ah: 10
+  12: 1, // B - sungguh-sungguh dan sempurna
+  13: 0, // A - Al-Isra': 32
+  14: 1, // B - Berlomba membantu orang
+  15: 1, // B - kerusakan moral dan sosial
+  16: 2, // C - Menjaga pandangan, menutup aurat, memperbanyak ibadah
+  17: 2, // C - Nabi Yusuf AS
+  18: 1, // B - Jujur, amanah, tawadu'
+  19: 2, // C - Menghargai semua orang
+  20: 1, // B - transparansi dan akuntabilitas
+  21: 0, // A - Melaksanakan tugas sebaik-baiknya
+  22: 1, // B - Kemandirian dan etos kerja
+  23: 1, // B - Berusaha maksimal lalu serahkan ke Allah
+  24: 0, // A - Ar-Ra'd: 11
+  25: 1, // B - Perbedaan kiblat
+  26: 0, // A - Memakan bangkai saudara sendiri
+  27: 1, // B - keharmonisan hubungan sosial
+  28: 0, // A - Syirik kecil yang wajib dihindari
+  29: 1, // B - Menolong sesama tanpa imbalan
+  30: 1, // B - Jihad di jalan Allah
+  31: 1, // B - Ikhlas karena Allah
+  32: 1, // B - Rajin shalat berjamaah dan belajar
+  33: 1, // B - Menyeimbangkan dunia dan akhirat
+  34: 1, // B - Semangat fastabikul khoirāt
+  35: 2, // C - Dirajam
+  36: 2, // C - Kekayaan dengan cara tidak halal
+  37: 1, // B - Allah bersama orang-orang yang sabar
+  38: 1, // B - Niat ibadah dan ridha Allah
+  39: 1, // B - Terus meningkatkan kualitas ibadah
+  40: 1, // B - Menjaga keturunan dari kerusakan
+  41: 1, // B - merusak persaudaraan dan menimbulkan permusuhan
+  42: 1, // B - Menjaga pandangan mata
+  43: 1, // B - Berduaan (khalwat)
+  44: 1, // B - Nasab/keturunan (hifdzun nasl)
+  45: 1, // B - konten pornografi dan chat tidak bermoral
+  46: 2, // C - Diharamkan
+  47: 1, // B - Bekerja keras, jujur, profesional, ikhlas
+  48: 1, // B - Dijauhi masyarakat dan tidak berkah
+  49: 0, // A - Barang siapa mampu menikah
+  50: 1, // B - mażmūmah dilarang, maḥmūdah diperintahkan
+};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  let currentSection = '';
+
+  questions.forEach((q) => {
+    if (q.section !== currentSection) {
+      currentSection = q.section;
+      const sec = document.createElement('div');
+      sec.className = 'section-header';
+      sec.innerHTML = `
+        <span class="section-badge">Materi</span>
+        <span class="section-title">${q.section}</span>
+        <div class="section-line"></div>
+      `;
+      container.appendChild(sec);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `card-${q.no}`;
+
+    const optionsHtml = q.options.map((opt, i) => `
+      <div class="option" id="opt-${q.no}-${i}" onclick="selectOption(${q.no}, ${i})">
+        <div class="option-letter">${letters[i]}</div>
+        <div style="flex:1">${opt}</div>
+        <div class="indicator" id="ind-${q.no}-${i}"></div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num" id="qnum-${q.no}">${q.no}</div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="options">${optionsHtml}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectOption(qNo, optIdx) {
+  if (revealed) return;
+  const prev = answered[qNo];
+  if (prev !== undefined) {
+    document.getElementById(`opt-${qNo}-${prev}`).classList.remove('selected');
+  }
+  document.getElementById(`opt-${qNo}-${optIdx}`).classList.add('selected');
+  const wasNew = answered[qNo] === undefined;
+  answered[qNo] = optIdx;
+  document.getElementById(`card-${qNo}`).classList.add('answered');
+  if (wasNew) updateProgress();
+}
+
+function updateProgress() {
+  const count = Object.keys(answered).length;
+  const pct = (count / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressCount').textContent = `${count} / ${questions.length}`;
+}
+
+function showScore() {
+  revealed = true;
+  let benar = 0, salah = 0, kosong = 0;
+
+  questions.forEach((q) => {
+    const correctIdx = answerKey[q.no];
+    const userIdx = answered[q.no];
+    const card = document.getElementById(`card-${q.no}`);
+    const qnum = document.getElementById(`qnum-${q.no}`);
+
+    // Disable all options
+    q.options.forEach((_, i) => {
+      const opt = document.getElementById(`opt-${q.no}-${i}`);
+      opt.classList.remove('selected');
+      opt.style.pointerEvents = 'none';
+    });
+
+    if (userIdx === undefined) {
+      // Not answered — just show correct answer
+      kosong++;
+      const correctOpt = document.getElementById(`opt-${q.no}-${correctIdx}`);
+      correctOpt.classList.add('show-correct');
+      document.getElementById(`ind-${q.no}-${correctIdx}`).textContent = '✅';
+      card.style.borderColor = '#aaa';
+    } else if (userIdx === correctIdx) {
+      // Correct
+      benar++;
+      const opt = document.getElementById(`opt-${q.no}-${userIdx}`);
+      opt.classList.add('correct');
+      document.getElementById(`ind-${q.no}-${userIdx}`).textContent = '✅';
+      card.classList.add('correct-card');
+      qnum.style.background = '#1a6b3c';
+    } else {
+      // Wrong
+      salah++;
+      const wrongOpt = document.getElementById(`opt-${q.no}-${userIdx}`);
+      wrongOpt.classList.add('wrong');
+      document.getElementById(`ind-${q.no}-${userIdx}`).textContent = '❌';
+      const correctOpt = document.getElementById(`opt-${q.no}-${correctIdx}`);
+      correctOpt.classList.add('show-correct');
+      correctOpt.style.opacity = '1';
+      document.getElementById(`ind-${q.no}-${correctIdx}`).textContent = '✅';
+      card.classList.add('wrong-card');
+      qnum.style.background = '#d93025';
+    }
+  });
+
+  const total = questions.length;
+  const nilai = Math.round((benar / total) * 100);
+  let icon = nilai >= 90 ? '🏆' : nilai >= 75 ? '👍' : nilai >= 60 ? '📝' : '💪';
+
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalScore').textContent = `Nilai: ${nilai}`;
+  document.getElementById('modalSub').textContent = `dari ${total} soal`;
+  document.getElementById('statBenar').textContent = benar;
+  document.getElementById('statSalah').textContent = salah;
+  document.getElementById('modalOverlay').classList.add('show');
+
+  // Update footer button
+  document.querySelector('.score-btn').textContent = '✅ Sudah Dinilai';
+  document.querySelector('.score-btn').style.opacity = '0.6';
+  document.querySelector('.score-btn').style.pointerEvents = 'none';
+}
+
+buildQuiz();
+updateProgress();
+</script>
+</body>
+</html>
